@@ -1,0 +1,3 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|images|assets|stylesheets|robots\.txt)
+RewriteRule ^(.*)$ index.php/lalaines/home/$1 [L]
