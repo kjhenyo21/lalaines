@@ -71,6 +71,12 @@ class Invoice extends CI_Controller {
 		$data = $customers->searchCustomers($lname);
 		echo json_encode($data);
 	}
+
+	public function getAllCustomers() {
+		$customers = new customers_db();
+		$data = $customers->getAllCustomers();
+		echo json_encode($data);
+	}
 	
 	public function getCustomerInfo() {
 		$customers = new customers_db();
@@ -148,9 +154,9 @@ class Invoice extends CI_Controller {
 		
 		//remove data from invoice_temp
 		$invoice->emptyTempInvoices();
+		echo '<script type="text/javascript">alert("Sales invoice successfully processed!");</script>';
 		$temp_inv_no = random_string('numeric', 8);
 		header("location: ".$this->config->item('base_url')."cashier/invoice?no=".$temp_inv_no);
-
 	}
 	
 	public function reset() {

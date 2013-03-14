@@ -198,22 +198,21 @@
 		var vat_amount = parseFloat(document.getElementById('vat_amt').innerHTML);
 		var vatable_amount = parseFloat(document.getElementById('vatable_amt').innerHTML);
 		var total_amount = parseFloat(document.getElementById('total_amt').innerHTML);
-		console.log();
-								
+		var customers;
+		
+		//fetch all customers available
+		$.ajax({
+			url: "invoice/getAllCustomers",
+			dataType: "json",
+			async: false,
+			success: function(data) {
+				customers = data;
+			}
+		});
+					
 		$(function() {
 			$('#cust_name').typeahead({
-				source: function(query, process) {
-					$.ajax({
-						url: "invoice/searchCustomers",
-						type: "post",
-						data: "search=" + query,
-						dataType: "json",
-						async: false,
-						success: function(data) {
-							process(data);
-						}
-					});
-				}
+				source: customers
 			});
 		});
 		

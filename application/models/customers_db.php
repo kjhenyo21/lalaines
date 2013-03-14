@@ -40,6 +40,17 @@ class Customers_DB extends CI_Model {
 		}
 		return $customers;
 	}
+	
+	function getAllCustomers() {
+		$query = $this->db->query("SELECT id, lname, fname, mname 
+									FROM customers");
+		$customers = array();
+		foreach ($query->result() as $row) {
+			$customers[] = "(".$row->id.") ".$row->lname.", ".$row->fname;
+		}
+		return $customers;
+	}
+	
 	function getCustomerInfo($cust_id) {
 		$query = $this->db->query("SELECT address, contact
 									FROM customers
