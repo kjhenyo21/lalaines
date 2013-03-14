@@ -36,7 +36,7 @@
 							<p>Are you sure you want to remove the item?</p>
 						</div>
 						<div class="modal-footer">
-							<a class="btn" id="removeButton{$i['id']}" href="#" data-url="{url}cashier/invoice/removeItem?id={$i['id']}&invoice={$temp_inv_no}" onClick="removeItem({$i['id']}); return false;">Yes</a>
+							<a class="btn" id="removeButton{$i['id']}" href="#" data-url="{url}cashier/invoice/removeItem?id={$i['id']}&ic={$i['item_code']}&qty={$i['quantity']}&invoice={$temp_inv_no}" onClick="removeItem({$i['id']}); return false;">Yes</a>
 							<a href="" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">No</a>
 						</div>
 					</div>
@@ -141,23 +141,23 @@
 									<table>
 										<tr>
 											<td style="text-align: right"><strong>Total</strong></td>
-											<td style="text-align: right; width: 103px"><strong>{$total_amt}</strong></td>
+											<td style="text-align: right; width: 103px"><strong><span id="total_amt">{$total_amt}</span></strong></td>
 										</tr>
 										<tr>
 											<td style="text-align: right">VAT</td>
-											<td style="text-align: right">12%</td>
+											<td style="text-align: right"><span id="vat_percent">{$vat_rate}%</span></td>
 										</tr>
 										<tr>
 											<td style="text-align: right">VATable Amt</td>
-											<td style="text-align: right">{$vatable_amt}</td>
+											<td style="text-align: right"><span id="vatable_amt">{$vatable_amt}</span></td>
 										</tr>
 										<tr>
 											<td style="text-align: right">VAT Amt</td>
-											<td style="text-align: right">{$vat_amt}</td>
+											<td style="text-align: right"><span id="vat_amt">{$vat_amt}</span></td>
 										</tr>
 										<tr>
 											<td style="text-align: right"><strong>Amt Due</strong></td>
-											<td style="text-align: right"><strong>{$total_amt}</strong></td>
+											<td style="text-align: right"><strong><span id="amt_due">{$total_amt}</span></strong></td>
 										</tr>
 									</table>
 								</td>
@@ -166,8 +166,10 @@
 					</div>
 					<div>
 						<input type="hidden" id="user_id" name="user_id" value="{$cashier_no}">
+						<input type="hidden" id="vat" name="vat" value="{$vat_amt}">
 						<button class="btn btn-primary" type="submit" id="enter_payment">Enter Payment</button>
-						<a data-url="{url}cashier/invoice/reset?no={$temp_inv_no}" class="btn" type="button" id="cancel_inv">Cancel Invoice</a>
+						<a data-url="{url}cashier/invoice/reset?no={$temp_inv_no}" class="btn" type="button" id="cancel_inv">Reset Invoice</a>
+						<a href="{url}cashier" class="btn" type="button" id="back">Back</a>
 					</div>
 				</fieldset>
 			</form>
@@ -191,7 +193,13 @@
 		var amount_due;
 		var cash;
 		var change;
-		
+		var vat_percent = document.getElementById('vat_percent').innerHTML;
+		var vat_rate = vat_percent.slice(0, vat_percent.indexOf('%')) / 100;
+		var vat_amount = parseFloat(document.getElementById('vat_amt').innerHTML);
+		var vatable_amount = parseFloat(document.getElementById('vatable_amt').innerHTML);
+		var total_amount = parseFloat(document.getElementById('total_amt').innerHTML);
+		console.log();
+								
 		$(function() {
 			$('#cust_name').typeahead({
 				source: function(query, process) {
@@ -248,7 +256,7 @@
 		
 		var form = $('#addItem');
 		$('#addButton').click(function(){
-					//when qty is updated, check inventory if there's still stock for certain product
+			//when qty is updated, check inventory if there's still stock for certain product
 			var item_code = document.getElementById('item_code').value;
 			var qty_demanded = document.getElementById('qty').value;
 			console.log(item_code);
@@ -271,8 +279,21 @@
 								$('#item_code').val("");
 								$('#qty').val("");
 								$('#addModal').modal('hide');
-								$('#items').load('invoice_items?no=' + data);					 
-								$('#removeModal').load('invoice_remove_modal?no=' + data);
+								$('#items').load('invoice_items?no=' + data.invoice_no);					 
+								$('#removeModal').load('invoice_remove_modal?no=' + data.invoice_no);
+								total_amount += data.amount;
+								vatable_amt_per_item = data.amount / (1 + vat_rate);
+								vat_amt_per_item = data.amount - vatable_amt_per_item;
+								vatable_amount += vatable_amt_per_item;
+								vat_amount += vat_amt_per_item;
+								console.log("amt_item: " + data.amount);
+								console.log("vat_rate: " + vat_rate);
+								console.log("vat_amt: " + vat_amount);
+								document.getElementById('total_amt').innerHTML = total_amount.toFixed(2);
+								document.getElementById('vatable_amt').innerHTML = vatable_amount.toFixed(2);
+								document.getElementById('vat_amt').innerHTML = vat_amount.toFixed(2);
+								document.getElementById('amt_due').innerHTML = total_amount.toFixed(2);
+								document.getElementById('vat').value = vat_amount.toFixed(2);
 							}
 						});
 					}
@@ -300,9 +321,22 @@
 				url : $('#removeButton'+ id).attr('data-url'),
 				dataType: "json",
 				success: function(data){
-					 $('#remove'+ id).modal('hide');
-					 $('#items').load('invoice_items?no=' + data.temp_inv_no);
-					}
+					$('#remove'+ id).modal('hide');
+					$('#items').load('invoice_items?no=' + data.temp_inv_no);
+					total_amount -= data.amount;
+					vatable_amt_per_item = data.amount / (1 + vat_rate);
+					vat_amt_per_item = data.amount - vatable_amt_per_item;
+					vatable_amount -= vatable_amt_per_item;
+					vat_amount -= vat_amt_per_item;
+					console.log("amt_item: " + data.amount);
+					console.log("vat_rate: " + vat_rate);
+					console.log("vat_amt: " + vat_amount);
+					document.getElementById('total_amt').innerHTML = total_amount.toFixed(2);
+					document.getElementById('vatable_amt').innerHTML = vatable_amount.toFixed(2);
+					document.getElementById('vat_amt').innerHTML = vat_amount.toFixed(2);
+					document.getElementById('amt_due').innerHTML = total_amount.toFixed(2);
+					document.getElementById('vat').value = vat_amount.toFixed(2);
+				}
 			});
 		}
 	</script>

@@ -21,6 +21,7 @@ class Invoice extends CI_Controller {
 		$temp_inv_no = $_GET['no'];
 		//$cust_no = $_GET['customer'];
 		$temp_items = $temp_inv->getTempItems($temp_inv_no);
+		$vat_rate = $temp_inv->getPresentVATRate();
 		$total_qty = 0;
 		$total_amt = 0.00;
 		
@@ -41,10 +42,8 @@ class Invoice extends CI_Controller {
 			$this->mysmarty->assign('status', $this->session->userdata('status'));
 			$this->mysmarty->assign('cashier_no', $user_id);
 			$this->mysmarty->assign('temp_inv_no', $temp_inv_no);
-			//$this->mysmarty->assign('customer_no', $cust_no);
-			//$this->mysmarty->assign('customer', $customers->getCustomerByNo($cust_no));
-			//$this->mysmarty->assign('search_res', $customers->searchCustomers($txt));
 			$this->mysmarty->assign('items', $temp_items);
+			$this->mysmarty->assign('vat_rate', ($vat_rate * 100));
 			//$this->mysmarty->assign('profile', $profile->getProfile($user_id));
 			//$this->mysmarty->assign('adminID', $this->session->userdata('id'));
 			
@@ -54,14 +53,13 @@ class Invoice extends CI_Controller {
 					$total_amt += $items['amount'];
 				}
 			}
-				$vatable_amt = $total_amt / (1 + 0.12); //make VAT% dynamic
-				$vat_amt = $total_amt - $vatable_amt;
-			
+			$vatable_amt = $total_amt / (1 + $vat_rate); //make VAT% dynamic
+			$vat_amt = $total_amt - $vatable_amt;
 			
 			$this->mysmarty->assign('total_qty', $total_qty);
-			$this->mysmarty->assign('total_amt', $total_amt);
-			$this->mysmarty->assign('vatable_amt', $vatable_amt);
-			$this->mysmarty->assign('vat_amt', $vat_amt);
+			$this->mysmarty->assign('total_amt', number_format($total_amt, 2, '.', ''));
+			$this->mysmarty->assign('vatable_amt', number_format($vatable_amt, 2, '.', ''));
+			$this->mysmarty->assign('vat_amt', number_format($vat_amt, 2, '.', ''));
 			$this->mysmarty->display('header.tpl');
 			$this->mysmarty->display('cashier/invoice.tpl');
 		//}
@@ -83,26 +81,33 @@ class Invoice extends CI_Controller {
 		
 	public function addItem() {
 		$invoice = new cashier_db();
-		//$cust_no = $_GET['customer'];
+		$inventory = new inventory_db();
 		$temp_inv_no = $this->security->xss_clean($this->input->post('temp_inv_no'));
 		$i['temp_inv_no'] = $temp_inv_no;
-		//$i['temp_inv_no'] = $_GET['invoice'];
 		$i['item_code'] = $this->security->xss_clean($this->input->post('item_code'));
 		$i['quantity'] = $this->security->xss_clean($this->input->post('qty'));
-		$invoice->addTempItem($i);
-		echo json_encode($temp_inv_no);
-		//header("location: ".$this->config->item('base_url')."cashier/invoice?no=".$temp_inv_no);		
+		$si_info['item_code'] = $i['item_code'];
+		$si_info['units_sold'] = $i['quantity'];
+		$data = $invoice->addTempItem($i);
+		//update inventory_master_file by updating quantity on hand per item affected
+		$inventory->updateInventoryMasterFileWhenItemIsAddedToCart($si_info);
+		echo json_encode($data);	
 	}
 	
 	public function removeItem() {
 		$invoice = new cashier_db();
+		$inventory = new inventory_db();
 		$temp_inv_no = $_GET['invoice'];
 		$id = $_GET['id'];
-		$invoice->removeTempItem($id);
+		$qty = $_GET['qty'];
+		$si_info['item_code'] = $_GET['ic'];
+		$si_info['units_sold'] = $qty;
+		$data = $invoice->removeTempItem($id);
+		//update inventory_master_file by updating quantity on hand per item affected
+		$inventory->updateInventoryMasterFileWhenItemIsReturned($si_info);
 		$data['id'] = $id;		
 		$data['temp_inv_no'] = $temp_inv_no;		
 		echo json_encode($data);
-		//header("location: ".$this->config->item('base_url')."cashier/invoice?customer=".$cust_no."&invoice=".$temp_inv_no);
 	}
 	
 	public function placeInvoice() {
@@ -113,6 +118,7 @@ class Invoice extends CI_Controller {
 		$info['user_id'] = $this->security->xss_clean($this->input->post('user_id'));
 		$info['cust_id'] = $this->security->xss_clean($this->input->post('cust_id'));
 		$info['cust_name'] = $this->security->xss_clean($this->input->post('cust_name'));
+		$info['vat_amount'] = $this->security->xss_clean($this->input->post('vat'));
 		
 		$si_info = $invoice->createInvoice($info);
 		//echo $si_info['invoice_no'];
@@ -131,7 +137,7 @@ class Invoice extends CI_Controller {
 				$si_info['inventory_no'] = $inventory->updateInventory($si_info);				
 				$amount_due += $si_info['amount'];
 				$invoice->updateSalesInvoiceDetails($si_info);
-				$inventory->updateInventoryMasterFile($si_info);
+				$inventory->updateInventoryMasterFileWhenItemIsAddedToCart($si_info);
 				//echo $inventory_no;
 			}
 		}

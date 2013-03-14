@@ -10,7 +10,7 @@
 						<p>Are you sure you want to remove the item?</p>
 					</div>
 					<div class="modal-footer">
-						<a class="btn" id="removeButton{$i['id']}" href="#" data-url="{url}cashier/invoice/removeItem?id={$i['id']}&invoice={$temp_inv_no}" onClick="removeItem({$i['id']}); return false;">Yes</a>
+						<a class="btn" id="removeButton{$i['id']}" href="#" data-url="{url}cashier/invoice/removeItem?id={$i['id']}&ic={$i['item_code']}&qty={$i['quantity']}&invoice={$temp_inv_no}" onClick="removeItem({$i['id']}); return false;">Yes</a>
 						<a href="" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">No</a>
 					</div>
 				</div>

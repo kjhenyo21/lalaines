@@ -6,6 +6,7 @@ class Index extends CI_Controller {
         parent::__construct();
 		$this->load->library('session');
 		$this->load->model('customers_db');
+		$this->load->model('cashier_db');
 		//$this->load->model('account');
 		$this->load->helper('url');
 		$this->load->library('form_validation');
@@ -19,6 +20,8 @@ class Index extends CI_Controller {
 		else {
 			$data['current_url'] = $this->config->item('base_url')."admin";
 			$user_id = $this->session->userdata('id');
+			$invoice = new cashier_db();
+			$invoice->emptyTempInvoices();
 			/**$this->mysmarty->assign('error_old_pass', form_error('old_pass'));
 			$this->mysmarty->assign('error_new_pass', form_error('new_pass'));
 			$this->mysmarty->assign('error_c_new_pass', form_error('c_new_pas'));

@@ -66,12 +66,21 @@ class Cashier_DB extends CI_Model {
 			'amount' => $i['quantity'] * $unit_price
 		);
 		
-        $this->db->insert('sales_invoice_temp', $item);	
+        $this->db->insert('sales_invoice_temp', $item);
+		return $item;
 	}
 	
 	function removeTempItem($id) {
+		$query = $this->db->query("SELECT amount
+									FROM sales_invoice_temp
+									WHERE id = $id");
+		$row = $query->row(); 
+		$data['amount'] = $row->amount;
+		
 		$this->db->where('id', $id);
 		$this->db->delete('sales_invoice_temp');
+		
+		return $data;
 	}
 	
 	function emptyTempInvoices() {
@@ -82,7 +91,8 @@ class Cashier_DB extends CI_Model {
 		$info = array(
 			'cust_acct_no' => $info['cust_id'],
 			'cust_name' => $info['cust_name'],
-			'cashier_no' => $info['user_id']
+			'cashier_no' => $info['user_id'],
+			'vat_amount' => $info['vat_amount']
 		);
 		
         $this->db->insert('sales_invoice', $info);
@@ -120,6 +130,18 @@ class Cashier_DB extends CI_Model {
 		
 		$this->db->where('invoice_no', $d['invoice_no']);
 		$this->db->update('sales_invoice', $info);
+	}
+
+	function getPresentVATRate() {
+		$query = $this->db->query("SELECT *
+									FROM vat_rates
+									ORDER BY id
+									DESC LIMIT 1");
+									
+		$row = $query->row(); 
+		$vat_rate = $row->vat_rate;
+		
+		return $vat_rate;
 	}
 	
 	function getPaymentsByStudno($studno) {

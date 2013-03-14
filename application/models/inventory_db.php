@@ -29,7 +29,7 @@ class Inventory_DB extends CI_Model {
 		return $inventory_no;
 	}
 	
-	function updateInventoryMasterFile($d) {
+	function updateInventoryMasterFileWhenItemIsAddedToCart($d) {
 		$ic = $d['item_code'];
 		$query = $this->db->query("SELECT qty_on_hand
 									FROM inventory_master_file
@@ -38,6 +38,24 @@ class Inventory_DB extends CI_Model {
 		$row = $query->row(); 
 		$qty_on_hand = $row->qty_on_hand;
 		$qty_on_hand -= $d['units_sold'];
+		
+		$info = array(
+			'qty_on_hand' => $qty_on_hand
+		);
+		
+		$this->db->where('item_code', $d['item_code']);
+		$this->db->update('inventory_master_file', $info);
+	}
+
+	function updateInventoryMasterFileWhenItemIsReturned($d) {
+		$ic = $d['item_code'];
+		$query = $this->db->query("SELECT qty_on_hand as qty
+									FROM inventory_master_file
+									WHERE item_code = $ic");
+		
+		$row = $query->row(); 
+		$qty_on_hand = $row->qty;
+		$qty_on_hand += $d['units_sold'];
 		
 		$info = array(
 			'qty_on_hand' => $qty_on_hand
