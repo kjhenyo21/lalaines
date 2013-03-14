@@ -154,9 +154,10 @@ class Invoice extends CI_Controller {
 		
 		//remove data from invoice_temp
 		$invoice->emptyTempInvoices();
-		echo '<script type="text/javascript">alert("Sales invoice successfully processed!");</script>';
 		$temp_inv_no = random_string('numeric', 8);
-		header("location: ".$this->config->item('base_url')."cashier/invoice?no=".$temp_inv_no);
+		echo '<script type="text/javascript"> alert("Sales invoice successfully processed!"); document.location.href = "'.$this->config->item('base_url').'cashier/invoice?no='.$temp_inv_no.'";</script>';
+		
+		//header("location: ".$this->config->item('base_url')."cashier/invoice?no=".$temp_inv_no);
 	}
 	
 	public function reset() {
