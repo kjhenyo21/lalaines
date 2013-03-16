@@ -123,7 +123,12 @@ class Invoice extends CI_Controller {
 		$amount_due = 0.00;
 		$info['user_id'] = $this->security->xss_clean($this->input->post('user_id'));
 		$info['cust_id'] = $this->security->xss_clean($this->input->post('cust_id'));
-		$info['cust_name'] = $this->security->xss_clean($this->input->post('cust_name'));
+		$info['cust_name'] = $this->input->post('cust_name');
+		$info['cust_address'] = $this->input->post('cust_address');
+		$info['cust_sex'] = $this->input->post('cust_sex');
+		$info['cust_bdate'] = $this->input->post('cust_bdate');
+		$info['cust_contact'] = $this->input->post('cust_contact');
+		$info['cust_email'] = $this->input->post('cust_email');
 		$info['vat_amount'] = $this->security->xss_clean($this->input->post('vat'));
 		
 		$si_info = $invoice->createInvoice($info);
@@ -143,7 +148,6 @@ class Invoice extends CI_Controller {
 				$si_info['inventory_no'] = $inventory->updateInventory($si_info);				
 				$amount_due += $si_info['amount'];
 				$invoice->updateSalesInvoiceDetails($si_info);
-				$inventory->updateInventoryMasterFileWhenItemIsAddedToCart($si_info);
 				//echo $inventory_no;
 			}
 		}

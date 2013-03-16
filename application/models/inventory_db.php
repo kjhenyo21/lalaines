@@ -70,8 +70,10 @@ class Inventory_DB extends CI_Model {
 									FROM inventory_master_file
 									WHERE item_code = $item_code");
 		
-		$row = $query->row(); 
-		$qty_on_hand = $row->qty_on_hand;
+		if ($query->row()) {
+			$row = $query->row(); 
+			$qty_on_hand = $row->qty_on_hand;
+		} else $qty_on_hand = false;
 		return $qty_on_hand;
 	}
 }

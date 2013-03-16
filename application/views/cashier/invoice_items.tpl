@@ -12,7 +12,7 @@
 								{if ($items)}
 									{foreach $items as $i}
 										<tr>
-											<td>{$i['item_code']}</td>
+											<td><span id="it_code">{$i['item_code']}</span></td>
 											<td>{$i['desc']}</td>
 											<td style="text-align: right">{$i['quantity']}</td>
 											<td style="text-align: right">{$i['price']}</td>
@@ -30,7 +30,7 @@
 									</tr>
 								{else}
 									<tr>
-										<td>000000</td>
+										<td><span id="it_code">000000</span></td>
 										<td>--</td>
 										<td style="text-align: right">0</td>
 										<td style="text-align: right">0.00</td>
@@ -41,3 +41,15 @@
 							</tbody>
 						</table>
 					</div>
+	<script>
+		$(function() {
+			it_code = parseFloat(document.getElementById('it_code').innerHTML);
+			if (it_code != 0) {
+				document.getElementById('enter_payment').disabled = false;
+				document.getElementById('cancel_inv').removeAttribute("disabled");
+			} else {
+				document.getElementById('enter_payment').disabled = true;
+				document.getElementById('cancel_inv').setAttribute("disabled", "disabled");
+			}
+		});
+	</script>

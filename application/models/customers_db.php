@@ -21,7 +21,6 @@ class Customers_DB extends CI_Model {
 					'id' => $row->id,
 					'lname' => $row->lname,
 					'fname' => $row->fname,
-					'mname' => $row->mname,
 					'sex' => $row->sex,
 					'contact' => $row->contact
 				);
@@ -29,9 +28,9 @@ class Customers_DB extends CI_Model {
 			return $customer;
 		} else return false;
 	}
-	
+		
 	function searchCustomers($lname) {
-		$query = $this->db->query("SELECT id, lname, fname, mname 
+		$query = $this->db->query("SELECT id, lname, fname
 									FROM customers 
 									WHERE lname like '$lname%'");
 		$customers = array();
@@ -42,7 +41,7 @@ class Customers_DB extends CI_Model {
 	}
 	
 	function getAllCustomers() {
-		$query = $this->db->query("SELECT id, lname, fname, mname 
+		$query = $this->db->query("SELECT id, lname, fname
 									FROM customers");
 		$customers = array();
 		foreach ($query->result() as $row) {
@@ -52,13 +51,16 @@ class Customers_DB extends CI_Model {
 	}
 	
 	function getCustomerInfo($cust_id) {
-		$query = $this->db->query("SELECT address, contact
+		$query = $this->db->query("SELECT address, sex, bdate, contact, email
 									FROM customers
 									WHERE id=$cust_id");
 		if ($query->result()) {
 			foreach ($query->result() as $row) {
 				$info['address'] = $row->address;
+				$info['sex'] = $row->sex;
+				$info['bdate'] = $row->bdate;
 				$info['contact'] = $row->contact;
+				$info['email'] = $row->email;
 			}
 			return $info;
 		} else return false;
@@ -74,6 +76,22 @@ class Customers_DB extends CI_Model {
 			}
 			return $address;
 		} else return false;
+	}
+
+	function addCutomer($c) {
+	    $customer = array(
+			'uname' => $m['uname'],
+			'mail' => $m['mail']
+        );
+ 		$account = array(
+			'uname' => $m['uname'],
+			'mail' => $m['mail'],
+			'roleID' => 2,
+			'password' => $this->encrypt->encode($m['password'])
+		);
+		
+        $this->db->insert('member', $member);
+		$this->db->insert('user_account', $account);	
 	}
 	
 	function getMembers() {

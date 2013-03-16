@@ -15,7 +15,6 @@ class Account extends CI_Model {
 							'id' => $id
 							);
 				$this->session->set_userdata($newdata);
-				
 				header("location:".$this->config->item('base_url')."admin");
 			} else if($ensure_credentials['role'] == 'cashier'){
 				$newdata = array(

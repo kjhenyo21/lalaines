@@ -56,8 +56,8 @@ class Cashier_DB extends CI_Model {
 		$row = $query->row(); 
 		$desc = $row->desc;
 		$unit_price = $row->unit_price;
-		
- 		$item = array(
+
+		$item = array(
 			'invoice_no' => $i['temp_inv_no'],
 			'item_code' => $i['item_code'],
 			'desc' => $desc,
@@ -66,7 +66,22 @@ class Cashier_DB extends CI_Model {
 			'amount' => $i['quantity'] * $unit_price
 		);
 		
-        $this->db->insert('sales_invoice_temp', $item);
+		//if the item already exists in the cart, update the quantiy and amount
+		//else, simply add it
+		$query = $this->db->query("SELECT *
+									FROM sales_invoice_temp
+									WHERE item_code = $item_code");
+		if ($query->row()) {
+			$row = $query->row();
+			$current_qty = $row->quantity;
+			$current_amt = $row->amount;
+			$item['quantity'] += $current_qty;
+			$item['amount'] += $current_amt;
+			
+			$this->db->where('item_code', $item_code);
+			$this->db->update('sales_invoice_temp', $item);
+		} else $this->db->insert('sales_invoice_temp', $item);
+		
 		return $item;
 	}
 	
@@ -88,14 +103,38 @@ class Cashier_DB extends CI_Model {
 	}
 	
 	function createInvoice($info) {
-		$info = array(
+		$temp = explode(",", $info['cust_name']);
+		$lname = trim($temp[0]);
+		$fname = trim($temp[1]);
+		
+		$invoice_info = array(
 			'cust_acct_no' => $info['cust_id'],
 			'cust_name' => $info['cust_name'],
 			'cashier_no' => $info['user_id'],
 			'vat_amount' => $info['vat_amount']
 		);
 		
-        $this->db->insert('sales_invoice', $info);
+        $this->db->insert('sales_invoice', $invoice_info);
+		
+		//if the customer isn't in the database yet, add him/her
+		$query = $this->db->query("SELECT *
+									FROM customers
+									WHERE lname = '$lname'
+										AND fname = '$fname'");
+										
+		if (!$query->row()) {
+			$cust_info = array(
+				'id' => $info['cust_id'],
+				'lname' => $lname,
+				'fname' => $fname,
+				'bdate' => $info['cust_bdate'],
+				'sex' => $info['cust_sex'],
+				'address' => $info['cust_address'],
+				'contact' => $info['cust_contact'],
+				'email' => $info['cust_email']
+			);
+			$this->db->insert('customers', $cust_info);
+		}
 		
 		$query = $this->db->query("SELECT *
 									FROM sales_invoice s
