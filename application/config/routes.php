@@ -40,6 +40,7 @@
 
 $route['default_controller'] = "index";
 $route['404_override'] = '';
+$route['admin'] = 'admin/index';
 $route['cashier'] = 'cashier/index';
 $route['inventory'] = 'inventory/index';
 
