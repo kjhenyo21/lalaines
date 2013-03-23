@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2013-03-13 13:55:19
+<?php /* Smarty version Smarty-3.1.7, created on 2013-03-14 16:26:40
          compiled from "C:\xampp\htdocs\lalaines\application/views\header.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:4621514077379dc856-19393722%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '9a666f5e850329b9a613d7ea8698f2b8e7a59f9a' => 
     array (
       0 => 'C:\\xampp\\htdocs\\lalaines\\application/views\\header.tpl',
-      1 => 1363164548,
+      1 => 1363274789,
       2 => 'file',
     ),
   ),
@@ -15,17 +15,19 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.7',
+  'unifunc' => 'content_51407737e35aa',
   'variables' => 
   array (
     'cashier_no' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.7',
-  'unifunc' => 'content_51407737e35aa',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_51407737e35aa')) {function content_51407737e35aa($_smarty_tpl) {?><?php if (!is_callable('smarty_function_url')) include 'C:\\xampp\\htdocs\\lalaines\\application\\libraries\\smarty\\plugins\\function.url.php';
 ?><!DOCTYPE html>
 	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
 		<title>WADWE Cashier</title>
 		<link href="<?php echo smarty_function_url(array(),$_smarty_tpl);?>
 assets/stylesheets/bootstrap.css" rel="stylesheet"></link>

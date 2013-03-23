@@ -1,0 +1,86 @@
+<!--
+ * WADWE Computerized AIS
+ * @author Kristian Jacob Abad Lora <kjalora92@yahoo.com>
+ * @date-created October 31, 2012
+-->
+	<head>
+		<title>Trailblazer - Home</title>
+	</head>
+	
+	<body>
+		<!-- Modal for Loading a File for Audit Trail-->
+		<div id="load_file" class="modal hide fade" style="margin-top: -50px; width: 480px">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="closeIt(); return false;">&times;</button>
+				<h3>Load File</h3>
+			</div>
+			<div id="load_file-body" class="modal-body">
+				<form id="load-file-form" class="form-horizontal">
+					<fieldset>
+						<div style="margin: 0 35px">
+							<div class="field-group" id="group-file">
+								<label class="field-label" for="file">File</label>
+								<div class="control">
+									<input type="file" class="span3" id="file" name="file" onChange="onChangeFile(); return false;" placeholder="Enter file directory">
+								</div>
+							</div>
+							<div class="field-group" id="group-doc">
+								<label class="field-label" for="doc">FR Kind</label>
+								<div class="control">
+									<select class="span3" id="doc" name="doc">
+										<option></option>
+										<option>Income Statement</option>
+										<option>Balance Sheet</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div style="margin: 0 156px">
+							<button class="btn btn-small" id="add" disabled="disabled" onClick="submitIt(); return false;">Load File</button>
+							<button class="btn btn-small" data-dismiss="modal" id="close" onClick="closeIt(); return false;">Cancel</button> </div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		
+		<!-- Main -->
+		<h3 style="margin: 20px auto; text-align: center"> Switchboard </h3>
+		<div id="main-wrapper" style="width: 300px">
+			<div style="margin: 0 auto; text-align: center">
+				<a  href="#load_file" data-toggle="modal" role="button" class="btn" style="width: 190px; margin-bottom:10px">Start a Trail!</a>
+				<br><a href="{url}cashier/profile" role="button" class="btn" style="width: 190px; margin-bottom:10px">Profile</a>
+				<br><a href="{url}index/logout" role="button" class="btn" style="width: 190px">Logout</a>
+			</div>
+		</div>
+	
+		<link href="{url}assets/stylesheets/bootstrap.css" rel="stylesheet"></link>
+		<link href="{url}assets/stylesheets/bootstrap-responsive.css" rel="stylesheet"></link>
+		<link href="{url}assets/stylesheets/main.css" rel="stylesheet"></link>
+		<link href="{url}assets/stylesheets/forms.css" rel="stylesheet"></link>
+		<script src="{url}assets/scripts/jquery.js" type="text/javascript"></script>
+		<script src="{url}assets/scripts/bootstrap.min.js" type="text/javascript"></script>
+		<script>
+			var file = $('#file').val();
+			var doc = $(this).find('option:selected').val();
+			
+			function closeIt() {
+				$('#file').val("");
+				$('#add').attr("disabled", "disabled");
+				$('#add').removeClass("btn-primary");
+			}
+			
+			function onChangeFile() {
+				$('#add').removeAttr("disabled");
+				$('#add').addClass("btn-primary");
+			}
+			
+			function submitIt() {
+				console.log(doc);
+			
+					$.ajax({
+						url: 'audit_trail/index/readFile',
+						type: "POST",
+					});
+				
+			}
+		</script>

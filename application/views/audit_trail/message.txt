@@ -1,0 +1,106 @@
+<!--
+ * WADWE Computerized AIS
+ * @author Kristian Jacob Abad Lora <kjalora92@yahoo.com>
+ * @date-created October 31, 2012
+-->
+	<body onload="JavaScript:refresh(3000);">
+		<!-- Modal for Loading Transaction Details-->
+		{if ($messages)}
+			{$noOfMessages = 0}
+			{$row = 0}
+			{foreach $messages as $m}
+				{if ($m['status'] == 'new')}
+					<div id="ignored-message{$row}" class="modal hide fade" style="margin-top: -120px; margin-left: -180px; width: 320px; display: block;" aria-hidden="false">
+						<div class="modal-header">
+							<div id="close"><a href="#" class="close" onClick="closeMessage({$row}, {$m['id']}); return false;">&times;</a></div>
+							<h3 style="color: maroon">New Message Received!</h3>
+						</div>
+						<div class="modal-body">
+							<div class="input" style="margin: 0 10px">
+								<div>Name: {$m['name']}</div>
+								<div>Contact: {$m['contact']}</div>
+								<div>Date: {$m['date']}</div>
+								<div>OR No: {$m['or_no']}</div>
+								<div>Amount: Php {$m['amt']}</div>
+								<div>Reply: <strong>{$m['reply']}</strong></div>
+								<div>Status: <span style="color: red"><strong>New!</strong></span></div>
+								{$noOfMessages = $noOfMessages - 1}
+							</div>
+						</div>
+						<div class="modal-footer">
+							<div style="text-align: center">
+								<!--<a href="skype:+63{$contact}?call" class="btn btn-small btn-primary" type="submit" id="call">Call</a>-->
+								<a href="#" class="btn btn-small btn-primary" type="button" id="text" onClick="textIt(); return false;">Update Confirmation</a>
+								<button class="btn btn-small" data-dismiss="modal" id="close" onClick="closeMessage({$row}, {$m['id']}); return false;">Update Later</button>
+							</div>
+						</div>
+					</div>
+				{else}
+					<div id="ignored-message{$row}" class="modal hide fade" style="margin-top: -120px; margin-left: -180px; width: 320px; display: block;" aria-hidden="false">
+						<div class="modal-header">
+							<div id="close"><a href="#" class="close" onClick="closeMessage({$row}, {$m['id']}); return false;">&times;</a></div>
+							<h3 style="color: maroon">Ignored Message</h3>
+						</div>
+						<div class="modal-body">
+							<div class="input" style="margin: 0 10px">
+								<div>Name: {$m['name']}</div>
+								<div>Contact: {$m['contact']}</div>
+								<div>Date: {$m['date']}</div>
+								<div>OR No: {$m['or_no']}</div>
+								<div>Amount: Php {$m['amt']}</div>
+								<div>Reply: <strong>{$m['reply']}</strong></div>
+								<div>Status: <span style="color: red">{$m['status']}</span></div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<div style="text-align: center">
+								<!--<a href="skype:+63{$contact}?call" class="btn btn-small btn-primary" type="submit" id="call">Call</a>-->
+								<a href="#" class="btn btn-small btn-primary" type="button" id="text" onClick="textIt(); return false;">Update Confirmation</a>
+								<button class="btn btn-small" data-dismiss="modal" id="close" onClick="closeMessage({$row}, {$m['id']}); return false;">Update Later</button>
+							</div>
+						</div>
+					</div>
+				{/if}
+				{$noOfMessages = $noOfMessages + 1}
+				{$row = $row + 1}
+			{/foreach}
+		{/if}
+
+		<script>
+			var no = {$noOfMessages};
+			var ignored = true;
+			$('#ignored-message0').focus();
+			function refresh(timeoutPeriod) {
+				var time = timeoutPeriod;
+				$.ajax({
+					type: "GET",
+					url : 'index/checkIgnoredAndNewMessages?no=' + no,
+					dataType: "json",
+					success: function(data){
+						console.log('data: '+data.latest_count);
+						console.log('current: '+no);
+						
+						if (data.latest_count != no) {
+							location.reload(true);
+						} else {
+							if (ignored) {
+								for (i=0; i < no; i++) {
+									//show
+									$('body').append('<div class="modal-backdrop fade in"></div> ');
+									$('#ignored-message' + i).removeClass('hide');
+									$('#ignored-message' + i).addClass('in');
+								}
+							}
+						}
+						
+					}
+				});
+				setTimeout("refresh(10000)",timeoutPeriod);
+			}
+			
+			function closeMessage(id) {
+				ignored = false;
+				$('#ignored-message' + id).removeClass('in');
+				$('#ignored-message' + id).addClass('hide');
+			}
+		</script>

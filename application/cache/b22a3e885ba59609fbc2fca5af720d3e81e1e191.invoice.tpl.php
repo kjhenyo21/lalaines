@@ -5,17 +5,17 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'b22a3e885ba59609fbc2fca5af720d3e81e1e191' => 
     array (
       0 => 'C:\\xampp\\htdocs\\lalaines\\application/views\\cashier\\invoice.tpl',
-      1 => 1363185651,
+      1 => 1363434253,
       2 => 'file',
     ),
   ),
   'nocache_hash' => '31480512d843ab1a1a8-71508628',
   'version' => 'Smarty-3.1.7',
-  'unifunc' => 'content_514090f9435ef',
+  'unifunc' => 'content_5146ca3fe686b',
   'has_nocache_code' => false,
   'cache_lifetime' => 1,
 ),true); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_514090f9435ef')) {function content_514090f9435ef($_smarty_tpl) {?><!--
+<?php if ($_valid && !is_callable('content_5146ca3fe686b')) {function content_5146ca3fe686b($_smarty_tpl) {?><!--
  * WADWE Computerized AIS
  * @author Kristian Jacob Abad Lora <kjalora92@yahoo.com>
  * @date-created October 31, 2012
@@ -32,7 +32,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 						<div class="input-append" style="margin: 0 100px">
 							<input class="span2" id="item_code" name="item_code" type="text" placeholder="Item Code">
 							<input class="span2" id="qty" name="qty" type="text" placeholder="Qty" style="width: 30px">
-							<input type="hidden" id="temp_inv_no" name="temp_inv_no" value="50726338">
+							<input type="hidden" id="temp_inv_no" name="temp_inv_no" value="92928659">
 							<button class="btn" type="button" id="addButton">Add</button>
 						</div>
 					</fieldset>
@@ -56,22 +56,37 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 						</span>
 						<span>
 							<label>Name</label>
-							<input type="text" id="cust_name" name="cust_name" style="height: 11pt; margin-right: 30px" placeholder="Name" autocomplete="off">
+							<input type="text" id="cust_name" name="cust_name" style="height: 11pt; margin-right: 30px" placeholder="Last Name, First Name" autocomplete="off">
 						</span>
 						<span>
 							<label>Address</label>
-							<input type="text" id="cust_address" name="cust_address" style="height: 11pt; width: 320; margin-right: 30px" placeholder="Address">
+							<input type="text" id="cust_address" name="cust_address" style="height: 11pt; width: 260px; margin-right: 30px" placeholder="Address">
 						</span>
 					</div>
 					<br>
 					<div class="form-inline">
 						<span>
+							<label>Sex</label>
+							<select id="cust_sex" name="cust_sex" style="height: 18pt; width: 50px; margin-right: 30px" value="">
+								<option>M</option>
+								<option>F</option>
+							</select>
+						</span>
+						<span>
+							<label>Birthdate</label>
+							<input type="text" id="cust_bdate" name="cust_bdate" style="height: 11pt; width: 90px; margin-right: 30px" placeholder="Birthdate">
+						</span>
+						<span>
 							<label>Contact</label>
 							<input type="text" id="cust_contact" name="cust_contact" style="height: 11pt; width: 90px; margin-right: 30px" placeholder="Contact Number">
 						</span>
 						<span>
-							<label>Temp Invoice No.</label>
-							<input type="text" id="invoice_no" value="50726338" style="height: 11pt; width: 85px; margin-right: 70px">
+							<label>Email</label>
+							<input type="text" id="cust_email" name="cust_email" style="height: 11pt; width: 90px; margin-right: 30px" placeholder="Email">
+						</span>
+						<span>
+							<label>TI No.</label>
+							<input type="text" id="invoice_no" value="92928659" style="height: 11pt; width: 85px" readonly="readonly">
 						</span>
 					</div>
 					<br>
@@ -87,7 +102,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 							</thead>
 							<tbody>
 																	<tr>
-										<td>000000</td>
+										<td><span id="it_code">000000</span></td>
 										<td>--</td>
 										<td style="text-align: right">0</td>
 										<td style="text-align: right">0.00</td>
@@ -101,18 +116,18 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 						<table style="color: black">
 							<tr>
 								<td style="width: 300px; vertical-align: top">
-									<a href="#addModal" data-toggle="modal" data-inv_no="50726338">Add Item</a>
+									<a href="#addModal" data-toggle="modal" data-inv_no="92928659">Add Item</a>
 									<br><br><br><br>
 								</td>
 								<td style="width: 300px; vertical-align: top">
 									<div class="form-inline">
 										<span>
 											<label>Cash</label>
-											<input type="text" id="cash" name="cash" style="height: 11pt; width: 200px; text-align: right; margin-right: 70px" placeholder="0.00" onChange="onChangeCash(0);">
+											<input type="text" id="cash" name="cash" style="height: 11pt; width: 200px; text-align: right; margin-right: 70px" placeholder="0.00" onKeyup="onChangeCash(0.00);">
 										</span>
 										<span>
 											<label>Change</label>
-											<input type="text" id="change" name="change" style="height: 11pt; width: 200px; text-align: right; margin-right: 70px; font-style: bold" value="0.00">
+											<input type="text" id="change" name="change" style="height: 11pt; width: 200px; text-align: right; margin-right: 70px; font-style: bold" value="0.00" readonly="readonly">
 										</span>
 									</div>
 								</td>
@@ -120,23 +135,23 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 									<table>
 										<tr>
 											<td style="text-align: right"><strong>Total</strong></td>
-											<td style="text-align: right; width: 103px"><strong>0</strong></td>
+											<td style="text-align: right; width: 103px"><strong><span id="total_amt">0.00</span></strong></td>
 										</tr>
 										<tr>
 											<td style="text-align: right">VAT</td>
-											<td style="text-align: right">12%</td>
+											<td style="text-align: right"><span id="vat_percent">12%</span></td>
 										</tr>
 										<tr>
 											<td style="text-align: right">VATable Amt</td>
-											<td style="text-align: right">0</td>
+											<td style="text-align: right"><span id="vatable_amt">0.00</span></td>
 										</tr>
 										<tr>
 											<td style="text-align: right">VAT Amt</td>
-											<td style="text-align: right">0</td>
+											<td style="text-align: right"><span id="vat_amt">0.00</span></td>
 										</tr>
 										<tr>
 											<td style="text-align: right"><strong>Amt Due</strong></td>
-											<td style="text-align: right"><strong>0</strong></td>
+											<td style="text-align: right"><strong><span id="amt_due">0.00</span></strong></td>
 										</tr>
 									</table>
 								</td>
@@ -144,9 +159,11 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 						</table>
 					</div>
 					<div>
-						<input type="hidden" id="user_id" name="user_id" value="A-05382">
-						<button class="btn btn-primary" type="submit" id="enter_payment">Enter Payment</button>
-						<a data-url="http://localhost/lalaines/cashier/invoice/reset?no=50726338" class="btn" type="button" id="cancel_inv">Cancel Invoice</a>
+						<input type="hidden" id="user_id" name="user_id" value="C-69241">
+						<input type="hidden" id="vat" name="vat" value="0.00">
+						<button class="btn btn-primary" type="submit" id="enter_payment" disabled="disabled">Enter Payment</button>
+						<a data-url="http://localhost/lalaines/cashier/invoice/reset?no=92928659" class="btn" type="button" id="cancel_inv" disabled="disabled">Reset Invoice</a>
+						<a href="http://localhost/lalaines/cashier" class="btn" type="button" id="back">Back</a>
 					</div>
 				</fieldset>
 			</form>
@@ -170,21 +187,28 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 		var amount_due;
 		var cash;
 		var change;
+		var vat_percent = document.getElementById('vat_percent').innerHTML;
+		var vat_rate = vat_percent.slice(0, vat_percent.indexOf('%')) / 100;
+		var vat_amount = parseFloat(document.getElementById('vat_amt').innerHTML);
+		var vatable_amount = parseFloat(document.getElementById('vatable_amt').innerHTML);
+		var total_amount = parseFloat(document.getElementById('total_amt').innerHTML);
+		var customers;
+		var it_code = parseFloat(document.getElementById('it_code').innerHTML);
+		console.log(it_code);
+		
+		//fetch all customers available
+		$.ajax({
+			url: "invoice/getAllCustomers",
+			dataType: "json",
+			async: false,
+			success: function(data) {
+				customers = data;
+			}
+		});
 		
 		$(function() {
 			$('#cust_name').typeahead({
-				source: function(query, process) {
-					$.ajax({
-						url: "invoice/searchCustomers",
-						type: "post",
-						data: "search=" + query,
-						dataType: "json",
-						async: false,
-						success: function(data) {
-							process(data);
-						}
-					});
-				}
+				source: customers
 			});
 		});
 		
@@ -205,7 +229,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 						$('#cust_id').val(cust_id);
 						$('#cust_name').val(cust_name);
 						$('#cust_address').val(data.address);
+						$('#cust_sex').val(data.sex);
+						$('#cust_bdate').val(data.bdate);
 						$('#cust_contact').val(data.contact);
+						$('#cust_email').val(data.email);
 					}
 				});
 			}, 1000);
@@ -221,13 +248,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 		function onChangeCash(amount_due) {
 			//when cash is updated, update the change
 			cash = document.getElementById('cash').value;
+			amount_due = total_amount;
 			change = cash - amount_due;
-			$('#change').val(change);
+			$('#change').val(change.toFixed(2));
 		}
 		
 		var form = $('#addItem');
 		$('#addButton').click(function(){
-					//when qty is updated, check inventory if there's still stock for certain product
+			//when qty is updated, check inventory if there's still stock for certain product
 			var item_code = document.getElementById('item_code').value;
 			var qty_demanded = document.getElementById('qty').value;
 			console.log(item_code);
@@ -238,8 +266,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 				dataType: "json",
 				async: false,
 				success: function(data) {
+					console.log("qty: " + data)
 					if (qty_demanded > parseInt(data)) {
 						alert("Out of stock! Only " + data + " items left.");
+					} else if (qty_demanded == 0 || qty_demanded == "") {
+						alert("Cannot process 0 order. Please specify a quantity.");
+					} else if (data == false) {
+						alert("Product not found!");
 					} else {
 						$.ajax({
 							type: "POST",
@@ -250,8 +283,21 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 								$('#item_code').val("");
 								$('#qty').val("");
 								$('#addModal').modal('hide');
-								$('#items').load('invoice_items?no=' + data);					 
-								$('#removeModal').load('invoice_remove_modal?no=' + data);
+								$('#items').load('invoice_items?no=' + data.invoice_no);					 
+								$('#removeModal').load('invoice_remove_modal?no=' + data.invoice_no);
+								total_amount += data.amount;
+								vatable_amt_per_item = data.amount / (1 + vat_rate);
+								vat_amt_per_item = data.amount - vatable_amt_per_item;
+								vatable_amount += vatable_amt_per_item;
+								vat_amount += vat_amt_per_item;
+								console.log("amt_item: " + data.amount);
+								console.log("vat_rate: " + vat_rate);
+								console.log("vat_amt: " + vat_amount);
+								document.getElementById('total_amt').innerHTML = total_amount.toFixed(2);
+								document.getElementById('vatable_amt').innerHTML = vatable_amount.toFixed(2);
+								document.getElementById('vat_amt').innerHTML = vat_amount.toFixed(2);
+								document.getElementById('amt_due').innerHTML = total_amount.toFixed(2);
+								document.getElementById('vat').value = vat_amount.toFixed(2);
 							}
 						});
 					}
@@ -279,10 +325,41 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 				url : $('#removeButton'+ id).attr('data-url'),
 				dataType: "json",
 				success: function(data){
-					 $('#remove'+ id).modal('hide');
-					 $('#items').load('invoice_items?no=' + data.temp_inv_no);
-					}
+					$('#remove'+ id).modal('hide');
+					$('#items').load('invoice_items?no=' + data.temp_inv_no);
+					total_amount -= data.amount;
+					vatable_amt_per_item = data.amount / (1 + vat_rate);
+					vat_amt_per_item = data.amount - vatable_amt_per_item;
+					vatable_amount -= vatable_amt_per_item;
+					vat_amount -= vat_amt_per_item;
+					console.log("amt_item: " + data.amount);
+					console.log("vat_rate: " + vat_rate);
+					console.log("vat_amt: " + vat_amount);
+					it_code = parseFloat(document.getElementById('it_code').innerHTML);
+					console.log("code: " + it_code);
+					if (it_code != 0)
+						document.getElementById('enter_payment').disabled = false;
+					else document.getElementById('enter_payment').disabled = true;
+					document.getElementById('total_amt').innerHTML = total_amount.toFixed(2);
+					document.getElementById('vatable_amt').innerHTML = vatable_amount.toFixed(2);
+					document.getElementById('vat_amt').innerHTML = vat_amount.toFixed(2);
+					document.getElementById('amt_due').innerHTML = total_amount.toFixed(2);
+					document.getElementById('vat').value = vat_amount.toFixed(2);
+				}
 			});
 		}
+		
+
+		$(function() {
+			it_code = parseFloat(document.getElementById('it_code').innerHTML);
+			if (it_code != 0) {
+				document.getElementById('enter_payment').disabled = false;
+				document.getElementById('cancel_inv').removeAttribute("disabled");
+			} else {
+				document.getElementById('enter_payment').disabled = true;
+				document.getElementById('cancel_inv').setAttribute("disabled", "disabled");
+			}
+		});
+
 	</script>
 </html><?php }} ?>

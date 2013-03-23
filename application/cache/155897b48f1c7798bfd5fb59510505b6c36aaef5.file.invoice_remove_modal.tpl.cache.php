@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2013-02-27 14:39:12
+<?php /* Smarty version Smarty-3.1.7, created on 2013-03-14 09:46:26
          compiled from "C:\xampp\htdocs\lalaines\application/views\cashier\invoice_remove_modal.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:24369512e0c805c37a8-72788144%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '155897b48f1c7798bfd5fb59510505b6c36aaef5' => 
     array (
       0 => 'C:\\xampp\\htdocs\\lalaines\\application/views\\cashier\\invoice_remove_modal.tpl',
-      1 => 1361971951,
+      1 => 1363250735,
       2 => 'file',
     ),
   ),
@@ -15,6 +15,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.7',
+  'unifunc' => 'content_512e0c8081ada',
   'variables' => 
   array (
     'items' => 0,
@@ -22,8 +24,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'temp_inv_no' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.7',
-  'unifunc' => 'content_512e0c8081ada',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_512e0c8081ada')) {function content_512e0c8081ada($_smarty_tpl) {?><?php if (!is_callable('smarty_function_url')) include 'C:\\xampp\\htdocs\\lalaines\\application\\libraries\\smarty\\plugins\\function.url.php';
 ?>		<!-- Modal for Removing an Item -->
@@ -46,6 +46,8 @@ $_smarty_tpl->tpl_vars['i']->_loop = true;
 						<a class="btn" id="removeButton<?php echo $_smarty_tpl->tpl_vars['i']->value['id'];?>
 " href="#" data-url="<?php echo smarty_function_url(array(),$_smarty_tpl);?>
 cashier/invoice/removeItem?id=<?php echo $_smarty_tpl->tpl_vars['i']->value['id'];?>
+&ic=<?php echo $_smarty_tpl->tpl_vars['i']->value['item_code'];?>
+&qty=<?php echo $_smarty_tpl->tpl_vars['i']->value['quantity'];?>
 &invoice=<?php echo $_smarty_tpl->tpl_vars['temp_inv_no']->value;?>
 " onClick="removeItem(<?php echo $_smarty_tpl->tpl_vars['i']->value['id'];?>
 ); return false;">Yes</a>

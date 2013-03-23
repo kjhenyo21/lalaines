@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
 		<title>WADWE Cashier</title>
 		<link href="{url}assets/stylesheets/bootstrap.css" rel="stylesheet"></link>
 		<link href="{url}assets/stylesheets/bootstrap-responsive.css" rel="stylesheet"></link>

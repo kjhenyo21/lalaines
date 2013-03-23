@@ -11,16 +11,11 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'nocache_hash' => '376350f6146cc05b07-40102662',
   'version' => 'Smarty-3.1.7',
-  'unifunc' => 'content_514077741ed32',
-  'variables' => 
-  array (
-    'response' => 0,
-    'accessStatus' => 0,
-  ),
+  'unifunc' => 'content_514b107c5a3d1',
   'has_nocache_code' => false,
   'cache_lifetime' => 1,
 ),true); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_514077741ed32')) {function content_514077741ed32($_smarty_tpl) {?><!--
+<?php if ($_valid && !is_callable('content_514b107c5a3d1')) {function content_514b107c5a3d1($_smarty_tpl) {?>  <!--
  * Lalaine's Bookstore Computerized AIS
  * @author Kristian Jacob Abad Lora <kjalora92@yahoo.com>
  * @date-created October 31, 2012

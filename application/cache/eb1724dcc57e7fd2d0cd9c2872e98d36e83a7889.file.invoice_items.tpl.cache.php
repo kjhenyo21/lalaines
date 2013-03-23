@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2013-02-27 14:37:24
+<?php /* Smarty version Smarty-3.1.7, created on 2013-03-16 10:50:42
          compiled from "C:\xampp\htdocs\lalaines\application/views\cashier\invoice_items.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:24254512df0a20182d0-47828979%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'eb1724dcc57e7fd2d0cd9c2872e98d36e83a7889' => 
     array (
       0 => 'C:\\xampp\\htdocs\\lalaines\\application/views\\cashier\\invoice_items.tpl',
-      1 => 1361971902,
+      1 => 1363427417,
       2 => 'file',
     ),
   ),
@@ -43,8 +43,8 @@ foreach ($_from as $_smarty_tpl->tpl_vars['i']->key => $_smarty_tpl->tpl_vars['i
 $_smarty_tpl->tpl_vars['i']->_loop = true;
 ?>
 										<tr>
-											<td><?php echo $_smarty_tpl->tpl_vars['i']->value['item_code'];?>
-</td>
+											<td><span id="it_code"><?php echo $_smarty_tpl->tpl_vars['i']->value['item_code'];?>
+</span></td>
 											<td><?php echo $_smarty_tpl->tpl_vars['i']->value['desc'];?>
 </td>
 											<td style="text-align: right"><?php echo $_smarty_tpl->tpl_vars['i']->value['quantity'];?>
@@ -68,7 +68,7 @@ $_smarty_tpl->tpl_vars['i']->_loop = true;
 									</tr>
 								<?php }else{ ?>
 									<tr>
-										<td>000000</td>
+										<td><span id="it_code">000000</span></td>
 										<td>--</td>
 										<td style="text-align: right">0</td>
 										<td style="text-align: right">0.00</td>
@@ -78,4 +78,16 @@ $_smarty_tpl->tpl_vars['i']->_loop = true;
 								<?php }?>
 							</tbody>
 						</table>
-					</div><?php }} ?>
+					</div>
+	<script>
+		$(function() {
+			it_code = parseFloat(document.getElementById('it_code').innerHTML);
+			if (it_code != 0) {
+				document.getElementById('enter_payment').disabled = false;
+				document.getElementById('cancel_inv').removeAttribute("disabled");
+			} else {
+				document.getElementById('enter_payment').disabled = true;
+				document.getElementById('cancel_inv').setAttribute("disabled", "disabled");
+			}
+		});
+	</script><?php }} ?>
